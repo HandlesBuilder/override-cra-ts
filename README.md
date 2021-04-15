@@ -1,3 +1,73 @@
+# README
+
+创建项目：
+
+```bash
+npx create-react-app override-cra --use-yarn
+```
+
+安装依赖：
+
+```bash
+cd override-cra
+# 注意 less-loader 版本，请看下面的 Q & A
+yarn add antd
+yarn add customize-cra react-app-rewired babel-plugin-import less less-loader -D
+```
+
+package.json 同级目录下新建 `config-overrides.ts` 文件
+
+```js
+const { override, fixBabelImports, addLessLoader } = require('customize-cra');
+
+module.exports = override(
+  // antd 按需加载
+  fixBabelImports('import', {
+    libraryName: 'antd',
+    libraryDirectory: 'es',
+    style: true, // true: 使用 Less, 默认值：css
+  }),
+  // 配置 less-loader, modifyVars: 自定义 antd 主题
+  addLessLoader({
+    // 高版本 less-loader 需加上 lessOptions
+    // lessOptions: {
+    javascriptEnabled: true,
+    modifyVars: {
+      // '@primary-color': '#1DA57A'
+    },
+    // },
+  })
+);
+```
+
+修改 package.json 脚本 scripts：(react-scripts -> react-app-rewired)
+
+```js
+"scripts": {
+  // "start": "react-scripts start",
+  "start": "react-app-rewired start",
+  // "build": "react-scripts build",
+  "build": "react-app-rewired build",
+  // "test": "react-scripts test",
+  "test": "react-app-rewired test",
+},
+```
+
+Q&A：
+
+```text
+报错: ./node_modules/antd/es/button/style/index.less (./node_modules/css-loader/dist/cjs.js??ref--5-oneOf-8-1!./node_modules/postcss-loader/src??postcss!./node_modules/resolve-url-loader??ref--5-oneOf-8-3!./node_modules/less-loader/dist/cjs.js??ref--5-oneOf-8-4!./node_modules/antd/es/button/style/index.less)
+TypeError: this.getOptions is not a function
+
+原因：
+  less-loader 安装的版本过高
+解决：
+  yarn remove less-loader
+  yarn add less-loader@5.0.0
+```
+
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
