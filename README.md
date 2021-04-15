@@ -3,13 +3,13 @@
 创建项目：
 
 ```bash
-npx create-react-app override-cra --use-yarn
+npx create-react-app override-cra-ts --template typescript --use-yarn
 ```
 
 安装依赖：
 
 ```bash
-cd override-cra
+cd override-cra-ts
 # 注意 less-loader 版本，请看下面的 Q & A
 yarn add antd
 yarn add customize-cra react-app-rewired babel-plugin-import less less-loader -D
